@@ -1,87 +1,84 @@
 # 🍺 BeerLog
 
-Journal de dégustation de bières, partagé entre amis, auto-hébergé sur Proxmox et accessible via Tailscale.
+Journal de dégustation de bières, partagé entre amis, auto-hébergé sur Proxmox.
 
 - Liste commune des bières goûtées, recherche instantanée (sans accents) → « déjà goûtée ? »
 - Scan du code-barres (caméra) ou recherche par nom → infos récupérées sur **Open Food Facts**
-- Saisie manuelle si la bière est inconnue, photo prise au téléphone
-- Une note commune par bière (½ étoile) + commentaire, traçabilité « ajoutée / modifiée par »
+- 10 styles fixes (Blanche → Stout), une note commune sur 10, un commentaire, une photo
+- Page de statistiques (répartition par style, top 5, notes par style)
 - PWA installable sur l'écran d'accueil
 
 ## Stack
 
-SvelteKit 3 (Svelte 5, adapter-node) · SQLite (better-sqlite3 + Drizzle ORM) · Tailwind CSS 4 · `barcode-detector` (ZXing WASM, servi localement) · Tailscale Serve (HTTPS + identité).
+SvelteKit 3 (Svelte 5, adapter-node) · SQLite (better-sqlite3 + Drizzle ORM) · Tailwind CSS 4 · `barcode-detector` (ZXing WASM, servi localement).
 
 ## Architecture
 
 ```
-Téléphone / PC (Tailscale)
-        │  HTTPS https://beerlog.<tailnet>.ts.net
+Téléphone / PC
+        │  HTTPS https://beerlog.<domaine>
         ▼
-LXC Debian (Proxmox)
-  tailscale serve :443 ──► node build (127.0.0.1:3000) ──► /var/lib/beerlog/{beerlog.db, photos/}
-    ajoute Tailscale-User-Login / Tailscale-User-Name
+Reverse proxy (ex. Caddy, sur un autre LXC)
+        │  HTTP 192.168.1.20:3000
+        ▼
+LXC Debian « beerlog » : node build (0.0.0.0:3000) ──► /var/lib/beerlog/{beerlog.db, photos/}
 ```
 
-L'authentification est déléguée à Tailscale : l'appli lit les en-têtes `Tailscale-User-*`
-injectés par `tailscale serve`. Elle n'écoute que sur `127.0.0.1`, donc impossible de les forger.
-Sans ces en-têtes, réponse 403.
+> **Pas d'authentification dans l'appli.** Toute personne qui atteint le port peut lire et
+> modifier la liste. Le contrôle d'accès se fait en amont : réseau (Tailscale, VPN, LAN) ou
+> reverse proxy. N'exposez pas le port directement sur Internet.
+
+Le scan par caméra exige une page servie en **HTTPS** (ou `localhost`) : faites porter le TLS
+par le reverse proxy.
 
 ## Installation sur Proxmox
 
-Prérequis côté Tailscale (console d'admin) : **MagicDNS** et **HTTPS Certificates** activés.
-Optionnel : une [clé d'auth](https://login.tailscale.com/admin/settings/keys) pour éviter l'étape de connexion manuelle.
-
-Sur l'hôte Proxmox, en root, depuis une copie de ce dépôt :
+Script au format [community-scripts](https://community-scripts.org/), dans
+[clementlgl/proxmox-scripts](https://github.com/clementlgl/proxmox-scripts). Sur le nœud Proxmox :
 
 ```bash
-./deploy/proxmox-install.sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/clementlgl/proxmox-scripts/main/ct/beerlog.sh)"
 ```
 
-Options utiles : `--ctid 120`, `--storage local-zfs`, `--bridge vmbr1`, `--ts-authkey tskey-auth-…`
-(`--help` pour la liste). Le script :
+- LXC Debian 13 non privilégié, 1 vCPU / 1 Go RAM / 4 Go disque par défaut.
+- Code : `/opt/beerlog` (checkout git de ce dépôt). Données : `/var/lib/beerlog`
+  (`beerlog.db`, `photos/`, `backups/`). Réglages : `/etc/beerlog.env`.
+- Service systemd `beerlog`, sur `0.0.0.0:3000`.
+- Mise à jour : commande `update` dans le conteneur (sauvegarde de la base, rebuild, migrations au
+  démarrage, retour à la version précédente si l'appli ne redémarre pas).
 
-1. télécharge le template Debian 13 (ou 12) si besoin,
-2. crée un LXC non privilégié (1 cœur, 1 Go RAM, 4 Go disque) avec `/dev/net/tun`,
-3. installe Node.js 24 (NodeSource) et Tailscale (dépôts officiels),
-4. compile l'appli, la place dans `/opt/beerlog`, crée le service systemd `beerlog`,
-5. connecte le conteneur au tailnet et lance `tailscale serve` en HTTPS.
-
-### Mise à jour
+Derrière un reverse proxy HTTPS, mettre dans `/etc/beerlog.env` l'URL exacte tapée dans le
+navigateur, puis `systemctl restart beerlog` :
 
 ```bash
-git pull && ./deploy/proxmox-install.sh --update <CTID>
+ORIGIN=https://beerlog.example.com
 ```
 
-Les données (`/var/lib/beerlog`) sont conservées ; les migrations de base s'appliquent au démarrage.
-En cas d'échec au démarrage, l'ancienne version reste dans `/opt/beerlog.old`.
+Sinon les formulaires sont refusés (« Cross-site POST form submissions are forbidden »).
+Exemple Caddy :
 
-### Partager avec des amis
+```caddy
+beerlog.example.com {
+	reverse_proxy 192.168.1.20:3000
+}
+```
 
-Dans la console Tailscale : *Machines* → `beerlog` → **Share…** et envoyez l'invitation.
-Chaque ami a besoin d'un compte Tailscale. Leur nom apparaît dans « ajoutée par ».
-
-> À vérifier au premier partage : que `tailscale serve` transmet bien les en-têtes d'identité
-> pour les utilisateurs invités (sinon ils obtiendront un 403).
-
-### Sauvegarde
-
-Tout est dans `/var/lib/beerlog` : une sauvegarde `vzdump` du conteneur suffit.
+Sauvegarde : tout est dans `/var/lib/beerlog`, une sauvegarde `vzdump` du conteneur suffit.
 
 ## Développement
 
 ```bash
 npm install
-DEV_USER=moi@example.com npm run dev
+npm run dev
 ```
 
-`DEV_USER` remplace l'identité Tailscale en local. Après modification de
-`src/lib/server/db/schema.ts` : `npm run db:generate` pour créer la migration.
+Après modification de `src/lib/server/db/schema.ts` : `npm run db:generate` pour créer la migration.
 
 | Variable | Défaut | Rôle |
 |---|---|---|
+| `HOST` | `0.0.0.0` | Adresse d'écoute (adapter-node) |
+| `PORT` | `3000` | Port d'écoute |
+| `ORIGIN` | — | URL publique, requise en production pour les formulaires |
 | `DATA_DIR` | `./data` | Base SQLite et photos |
 | `MIGRATIONS_DIR` | `./drizzle` | Migrations Drizzle |
-| `DEV_USER` | — | Identité de secours (dev uniquement) |
-| `ORIGIN` | — | URL publique (`https://beerlog.<tailnet>.ts.net`), requise par adapter-node |
 | `BODY_SIZE_LIMIT` | `512K` | Mettre `8M` pour les photos |
