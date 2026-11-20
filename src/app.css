@@ -1,0 +1,54 @@
+@import 'tailwindcss';
+@import '@fontsource-variable/bricolage-grotesque/opsz.css';
+
+/* Colour tokens (light theme only). */
+:root {
+	--c-paper: #ffffff;
+	--c-ink: #3a2418;
+	--c-soft: #7d6a5f;
+	--c-line: #ece4de;
+	--c-field: #f6f1ed;
+	--c-foam: #fff6dc;
+	--c-danger: #b42318;
+	color-scheme: light;
+}
+
+@theme inline {
+	--font-sans: 'Bricolage Grotesque Variable', ui-sans-serif, system-ui, sans-serif;
+	--color-paper: var(--c-paper);
+	--color-ink: var(--c-ink);
+	--color-soft: var(--c-soft);
+	--color-line: var(--c-line);
+	--color-field: var(--c-field);
+	--color-foam: var(--c-foam);
+	--color-danger: var(--c-danger);
+}
+
+@layer base {
+	html {
+		-webkit-tap-highlight-color: transparent;
+	}
+	body {
+		@apply bg-paper font-sans text-ink antialiased;
+		font-optical-sizing: auto;
+	}
+	:focus-visible {
+		outline: 2px solid var(--c-ink);
+		outline-offset: 2px;
+	}
+}
+
+@layer components {
+	.label {
+		@apply mb-1 block text-sm font-medium text-soft;
+	}
+	.input {
+		@apply block w-full rounded-xl border border-transparent bg-field px-3.5 py-2.5 text-base text-ink outline-none placeholder:text-soft focus:border-ink;
+	}
+	.btn-primary {
+		@apply rounded-xl bg-ink px-4 py-3 font-semibold text-paper active:opacity-85 disabled:opacity-50;
+	}
+	.btn-secondary {
+		@apply rounded-xl bg-field px-4 py-3 font-semibold text-ink active:opacity-80;
+	}
+}

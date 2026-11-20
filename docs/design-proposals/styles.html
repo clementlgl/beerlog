@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>BeerLog, pistes de style</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Instrument+Sans:wght@400;500;600&family=Caveat+Brush&family=Barlow+Condensed:wght@400;500;600&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet" />
+<style>
+	:root {
+		--page: #e9ebe8;
+		--ink: #22262a;
+		--muted: #5d646b;
+	}
+	* { box-sizing: border-box; }
+	body {
+		margin: 0;
+		background: var(--page);
+		color: var(--ink);
+		font: 15px/1.5 'Instrument Sans', system-ui, sans-serif;
+	}
+	.intro { max-width: 68ch; margin: 0 auto; padding: 40px 16px 8px; }
+	.intro h1 { font: 600 28px/1.2 'Instrument Sans', sans-serif; margin: 0 0 8px; }
+	.intro p { margin: 0; color: var(--muted); }
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+		gap: 40px 28px;
+		max-width: 1180px;
+		margin: 0 auto;
+		padding: 32px 16px 64px;
+	}
+	.direction h2 { font: 600 20px/1.2 'Instrument Sans', sans-serif; margin: 0 0 4px; }
+	.direction > p { margin: 0 0 16px; color: var(--muted); max-width: 46ch; }
+
+	.phone {
+		width: 340px;
+		max-width: 100%;
+		height: 680px;
+		margin: 0 auto;
+		border-radius: 38px;
+		border: 10px solid #1c1f22;
+		overflow: hidden;
+		position: relative;
+		box-shadow: 0 24px 48px -24px rgba(20, 24, 28, 0.45);
+	}
+	.screen { height: 100%; overflow-y: auto; }
+
+	.spec { margin: 18px auto 0; width: 340px; max-width: 100%; font-size: 13.5px; }
+	.swatches { display: flex; gap: 6px; margin-bottom: 10px; }
+	.swatches span {
+		flex: 1; height: 34px; border-radius: 6px;
+		border: 1px solid rgba(0,0,0,.08);
+		display: flex; align-items: flex-end; padding: 3px 5px;
+		font-size: 10px; font-family: ui-monospace, monospace;
+	}
+	.spec dl { display: grid; grid-template-columns: 82px 1fr; gap: 4px 10px; margin: 0; }
+	.spec dt { color: var(--muted); }
+	.spec dd { margin: 0; }
+
+	/* ============ A. Étiquette ============ */
+	.etiq {
+		--bottle: #173326;
+		--label: #efe4c8;
+		--gold: #c9a04a;
+		--oxblood: #7a1f2b;
+		--label-ink: #2b2118;
+		background: var(--bottle);
+		color: var(--label);
+		font-family: 'Instrument Sans', sans-serif;
+	}
+	.etiq header { padding: 22px 20px 14px; text-align: center; }
+	.etiq .brand {
+		font: 400 30px/1 'Young Serif', serif;
+		color: var(--gold);
+		letter-spacing: .01em;
+	}
+	.etiq .brand small { display: block; font: 400 12.5px/1.4 'Instrument Sans'; color: #b9c7bd; margin-top: 6px; }
+	.etiq .search {
+		margin: 0 18px 18px;
+		border: 1px solid var(--gold);
+		border-radius: 999px;
+		padding: 10px 16px;
+		color: #b9c7bd;
+		font-size: 14px;
+	}
+	.etiq ul { list-style: none; margin: 0; padding: 0 18px 24px; display: grid; gap: 14px; }
+	.etiq li {
+		background: var(--label);
+		color: var(--label-ink);
+		border-radius: 14px 14px 40px 40px / 14px 14px 22px 22px;
+		padding: 14px 18px 16px;
+		position: relative;
+		outline: 1px solid var(--gold);
+		outline-offset: -6px;
+	}
+	.etiq .name { font: 400 20px/1.15 'Young Serif', serif; padding-right: 62px; }
+	.etiq .meta { font-size: 13px; color: #6a5a45; margin-top: 3px; padding-right: 62px; }
+	.etiq .seal {
+		position: absolute; right: 14px; top: 50%; translate: 0 -50%;
+		width: 54px; height: 54px; border-radius: 50%;
+		background: var(--oxblood); color: var(--label);
+		display: grid; place-items: center; text-align: center;
+		font: 400 19px/1 'Young Serif', serif;
+		box-shadow: 0 0 0 3px var(--label), 0 0 0 4px var(--oxblood);
+	}
+	.etiq .seal small { display: block; font: 500 9.5px/1 'Instrument Sans'; margin-top: 2px; opacity: .85; }
+	.etiq .seal.none { background: transparent; color: #8a7a62; box-shadow: 0 0 0 1px #b8a888; font-size: 11px; font-family: 'Instrument Sans'; }
+
+	/* ============ B. Ardoise ============ */
+	.ardoise {
+		--slate: #263230;
+		--chalk: #ece9e1;
+		--chalk-dim: #a9b0ab;
+		--yellow: #f3d46b;
+		--blue: #9cc5d8;
+		background:
+			radial-gradient(ellipse at 30% 10%, rgba(255,255,255,.05), transparent 60%),
+			var(--slate);
+		color: var(--chalk);
+		font-family: 'Barlow Condensed', sans-serif;
+	}
+	.ardoise .frame {
+		margin: 14px; min-height: calc(100% - 28px);
+		border: 7px solid #6b4a2f; border-radius: 6px;
+		box-shadow: inset 0 0 0 2px #4d3420;
+		padding: 18px 16px;
+	}
+	.ardoise .brand { font: 400 38px/1 'Caveat Brush', cursive; color: var(--yellow); text-align: center; transform: rotate(-2deg); }
+	.ardoise .sub { text-align: center; color: var(--chalk-dim); font-size: 16px; margin: 4px 0 16px; }
+	.ardoise .search {
+		border-bottom: 2px dashed var(--chalk-dim);
+		padding: 4px 2px; font-size: 18px; color: var(--chalk-dim); margin-bottom: 18px;
+	}
+	.ardoise h3 { font: 400 24px/1 'Caveat Brush', cursive; color: var(--blue); margin: 14px 0 6px; }
+	.ardoise ul { list-style: none; margin: 0; padding: 0; }
+	.ardoise li { padding: 6px 0; }
+	.ardoise .row { display: flex; align-items: baseline; gap: 6px; }
+	.ardoise .name { font: 400 25px/1.05 'Caveat Brush', cursive; white-space: nowrap; }
+	.ardoise .dots { flex: 1; border-bottom: 2px dotted rgba(236,233,225,.35); translate: 0 -5px; min-width: 12px; }
+	.ardoise .score { font-size: 21px; font-weight: 600; color: var(--yellow); white-space: nowrap; }
+	.ardoise .meta { font-size: 15.5px; color: var(--chalk-dim); letter-spacing: .02em; }
+
+	/* ============ C. Robe ============ */
+	.robe {
+		--white: #ffffff;
+		--ink: #1b2540;
+		--line: #e4e7ee;
+		--foam: #fff6dc;
+		--soft: #6a7388;
+		background: var(--white);
+		color: var(--ink);
+		font-family: 'Bricolage Grotesque', sans-serif;
+	}
+	.robe header { padding: 22px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+	.robe .brand { font: 800 26px/1 'Bricolage Grotesque'; letter-spacing: -.02em; }
+	.robe .add { width: 40px; height: 40px; border-radius: 12px; background: var(--ink); color: #fff; display: grid; place-items: center; font-size: 22px; }
+	.robe .srm {
+		display: flex; margin: 6px 20px 4px; height: 10px; border-radius: 5px; overflow: hidden;
+	}
+	.robe .srm span { flex: 1; }
+	.robe .srm-legend { display: flex; justify-content: space-between; margin: 0 20px 14px; font-size: 11.5px; color: var(--soft); }
+	.robe .search {
+		margin: 0 20px 14px; padding: 11px 14px; border-radius: 12px;
+		background: #f2f4f8; color: var(--soft); font-size: 14.5px;
+	}
+	.robe ul { list-style: none; margin: 0; padding: 0 20px 24px; }
+	.robe li { display: flex; gap: 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--line); }
+	.robe .glass { width: 34px; height: 52px; flex: none; }
+	.robe .name { font: 600 17px/1.2 'Bricolage Grotesque'; }
+	.robe .meta { font-size: 13px; color: var(--soft); }
+	.robe .note { margin-left: auto; text-align: right; font: 800 22px/1 'Bricolage Grotesque'; }
+	.robe .note small { display: block; font: 400 11px/1.3 'Bricolage Grotesque'; color: var(--soft); }
+
+	@media (max-width: 400px) {
+		.phone { border-width: 6px; border-radius: 30px; height: 620px; }
+	}
+</style>
+</head>
+<body>
+
+<div class="intro">
+	<h1>BeerLog, trois pistes de style</h1>
+	<p>Même écran (la liste des bières goûtées), même contenu, trois univers tirés du monde de la bière. Le design actuel n'est pas modifié : ces maquettes sont indépendantes de l'appli.</p>
+</div>
+
+<div class="grid">
+
+	<!-- A -->
+	<section class="direction">
+		<h2>A. Étiquette</h2>
+		<p>Chaque bière devient une étiquette de bouteille sur fond vert bouteille. La note est un cachet de cire, comme le sceau d'une abbaye.</p>
+		<div class="phone"><div class="screen etiq">
+			<header>
+				<div class="brand">BeerLog<small>Notre cave commune, 5 bières goûtées</small></div>
+			</header>
+			<div class="search">Déjà goûtée ? Cherchez une bière</div>
+			<ul>
+				<li><div class="name">La Chouffe</div><div class="meta">Brasserie d'Achouffe, blonde forte, 8 %</div><div class="seal">4,5<small>sur 5</small></div></li>
+				<li><div class="name">Leffe Blonde</div><div class="meta">Abbaye de Leffe, abbaye, 6,6 %</div><div class="seal">4<small>sur 5</small></div></li>
+				<li><div class="name">Guinness Draught</div><div class="meta">St. James's Gate, stout, 4,2 %</div><div class="seal">3,5<small>sur 5</small></div></li>
+				<li><div class="name">Hoegaarden</div><div class="meta">Blanche, 4,9 %</div><div class="seal">3<small>sur 5</small></div></li>
+				<li><div class="name">Punk IPA</div><div class="meta">BrewDog, IPA, 5,4 %</div><div class="seal none">à noter</div></li>
+			</ul>
+		</div></div>
+		<div class="spec">
+			<div class="swatches">
+				<span style="background:#173326;color:#efe4c8">173326</span>
+				<span style="background:#efe4c8">efe4c8</span>
+				<span style="background:#c9a04a">c9a04a</span>
+				<span style="background:#7a1f2b;color:#efe4c8">7a1f2b</span>
+				<span style="background:#2b2118;color:#efe4c8">2b2118</span>
+			</div>
+			<dl>
+				<dt>Titres</dt><dd>Young Serif, sérif à la manière des étiquettes imprimées</dd>
+				<dt>Texte</dt><dd>Instrument Sans</dd>
+				<dt>Signature</dt><dd>Étiquettes à bas arrondi, liseré or, cachet de cire</dd>
+				<dt>Ambiance</dt><dd>Cave, tradition belge, abbaye</dd>
+			</dl>
+		</div>
+	</section>
+
+	<!-- B -->
+	<section class="direction">
+		<h2>B. Ardoise</h2>
+		<p>La liste se lit comme l'ardoise des bières pression d'un bar : noms écrits à la craie, points de conduite jusqu'à la note, regroupement par style.</p>
+		<div class="phone"><div class="screen ardoise"><div class="frame">
+			<div class="brand">BeerLog</div>
+			<div class="sub">5 bières goûtées entre amis</div>
+			<div class="search">Déjà goûtée ? Cherchez…</div>
+			<h3>Blondes & abbayes</h3>
+			<ul>
+				<li><div class="row"><span class="name">La Chouffe</span><span class="dots"></span><span class="score">★ 4,5</span></div><div class="meta">Achouffe, 8 %</div></li>
+				<li><div class="row"><span class="name">Leffe Blonde</span><span class="dots"></span><span class="score">★ 4</span></div><div class="meta">Abbaye de Leffe, 6,6 %</div></li>
+			</ul>
+			<h3>Blanches</h3>
+			<ul>
+				<li><div class="row"><span class="name">Hoegaarden</span><span class="dots"></span><span class="score">★ 3</span></div><div class="meta">Belgique, 4,9 %</div></li>
+			</ul>
+			<h3>Brunes & stouts</h3>
+			<ul>
+				<li><div class="row"><span class="name">Guinness</span><span class="dots"></span><span class="score">★ 3,5</span></div><div class="meta">St. James's Gate, 4,2 %</div></li>
+			</ul>
+			<h3>IPA</h3>
+			<ul>
+				<li><div class="row"><span class="name">Punk IPA</span><span class="dots"></span><span class="score" style="color:#a9b0ab">à noter</span></div><div class="meta">BrewDog, 5,4 %</div></li>
+			</ul>
+		</div></div></div>
+		<div class="spec">
+			<div class="swatches">
+				<span style="background:#263230;color:#ece9e1">263230</span>
+				<span style="background:#ece9e1">ece9e1</span>
+				<span style="background:#f3d46b">f3d46b</span>
+				<span style="background:#9cc5d8">9cc5d8</span>
+				<span style="background:#6b4a2f;color:#ece9e1">6b4a2f</span>
+			</div>
+			<dl>
+				<dt>Noms</dt><dd>Caveat Brush, écriture à la craie</dd>
+				<dt>Infos</dt><dd>Barlow Condensed, chiffres serrés façon tableau</dd>
+				<dt>Signature</dt><dd>Cadre en bois, points de conduite, rubriques par style</dd>
+				<dt>Ambiance</dt><dd>Comptoir, convivial, un peu fait main</dd>
+			</dl>
+		</div>
+	</section>
+
+	<!-- C -->
+	<section class="direction">
+		<h2>C. Robe</h2>
+		<p>La couleur de chaque bière (sa robe, de la blanche à la stout) devient l'information principale. Le verre se remplit jusqu'à la note.</p>
+		<div class="phone"><div class="screen robe">
+			<header><div class="brand">BeerLog</div><div class="add">+</div></header>
+			<div class="srm">
+				<span style="background:#f6e39a"></span><span style="background:#ecc25a"></span><span style="background:#dc9a35"></span><span style="background:#b8631f"></span><span style="background:#7a3b16"></span><span style="background:#3a1c0b"></span><span style="background:#160a04"></span>
+			</div>
+			<div class="srm-legend"><span>Blanche</span><span>Ambrée</span><span>Stout</span></div>
+			<div class="search">Déjà goûtée ? Cherchez une bière</div>
+			<ul>
+				<li>
+					<svg class="glass" viewBox="0 0 34 52" aria-hidden="true"><defs><clipPath id="g1"><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z"/></clipPath></defs><g clip-path="url(#g1)"><rect width="34" height="52" fill="#f2f4f8"/><rect y="10" width="34" height="42" fill="#ecc25a"/><rect y="7" width="34" height="5" fill="#fff6dc"/></g><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="none" stroke="#1b2540" stroke-width="1.5"/></svg>
+					<div><div class="name">La Chouffe</div><div class="meta">Achouffe, 8 %</div></div>
+					<div class="note">4,5<small>sur 5</small></div>
+				</li>
+				<li>
+					<svg class="glass" viewBox="0 0 34 52" aria-hidden="true"><g clip-path="url(#g1)"><rect width="34" height="52" fill="#f2f4f8"/><rect y="15" width="34" height="37" fill="#dc9a35"/><rect y="12" width="34" height="5" fill="#fff6dc"/></g><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="none" stroke="#1b2540" stroke-width="1.5"/></svg>
+					<div><div class="name">Leffe Blonde</div><div class="meta">Abbaye, 6,6 %</div></div>
+					<div class="note">4<small>sur 5</small></div>
+				</li>
+				<li>
+					<svg class="glass" viewBox="0 0 34 52" aria-hidden="true"><g clip-path="url(#g1)"><rect width="34" height="52" fill="#f2f4f8"/><rect y="20" width="34" height="32" fill="#160a04"/><rect y="17" width="34" height="6" fill="#fff6dc"/></g><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="none" stroke="#1b2540" stroke-width="1.5"/></svg>
+					<div><div class="name">Guinness Draught</div><div class="meta">Stout, 4,2 %</div></div>
+					<div class="note">3,5<small>sur 5</small></div>
+				</li>
+				<li>
+					<svg class="glass" viewBox="0 0 34 52" aria-hidden="true"><g clip-path="url(#g1)"><rect width="34" height="52" fill="#f2f4f8"/><rect y="25" width="34" height="27" fill="#f6e39a"/><rect y="22" width="34" height="5" fill="#fff6dc"/></g><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="none" stroke="#1b2540" stroke-width="1.5"/></svg>
+					<div><div class="name">Hoegaarden</div><div class="meta">Blanche, 4,9 %</div></div>
+					<div class="note">3<small>sur 5</small></div>
+				</li>
+				<li>
+					<svg class="glass" viewBox="0 0 34 52" aria-hidden="true"><g clip-path="url(#g1)"><rect width="34" height="52" fill="#f2f4f8"/></g><path d="M3 2h28l-3 46a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3z" fill="none" stroke="#1b2540" stroke-width="1.5" stroke-dasharray="3 3"/></svg>
+					<div><div class="name">Punk IPA</div><div class="meta">IPA, 5,4 %</div></div>
+					<div class="note" style="font-size:13px;font-weight:600;color:#6a7388">à noter</div>
+				</li>
+			</ul>
+		</div></div>
+		<div class="spec">
+			<div class="swatches">
+				<span style="background:#ffffff">ffffff</span>
+				<span style="background:#1b2540;color:#fff">1b2540</span>
+				<span style="background:#f6e39a">f6e39a</span>
+				<span style="background:#dc9a35">dc9a35</span>
+				<span style="background:#160a04;color:#fff">160a04</span>
+			</div>
+			<dl>
+				<dt>Police</dt><dd>Bricolage Grotesque seule, du 800 au 400</dd>
+				<dt>Signature</dt><dd>Verre rempli selon la note, teinté selon le style (échelle de couleur EBC/SRM)</dd>
+				<dt>Bonus</dt><dd>La barre de couleurs sert aussi de filtre par style</dd>
+				<dt>Ambiance</dt><dd>Moderne, lisible, centrée sur la donnée</dd>
+			</dl>
+		</div>
+	</section>
+
+</div>
+</body>
+</html>
