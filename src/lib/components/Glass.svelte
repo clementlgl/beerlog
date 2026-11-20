@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { beerColor } from '#lib/beer-color.ts';
+	import { beerColor } from '#lib/styles.ts';
 
 	type Props = {
 		rating: number | null;

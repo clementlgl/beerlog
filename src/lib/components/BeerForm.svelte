@@ -16,6 +16,7 @@
 	import { enhance } from '$app/forms';
 	import RatingInput from './RatingInput.svelte';
 	import Glass from './Glass.svelte';
+	import { STYLES } from '#lib/styles.ts';
 	import { resizeImage } from '#lib/resize.ts';
 
 
@@ -26,10 +27,8 @@
 		action?: string;
 		submitLabel: string;
 		error?: string | null;
-		styles?: string[];
 	};
-	let { values, photoUrl = null, action = '', submitLabel, error = null, styles = [] }: Props =
-		$props();
+	let { values, photoUrl = null, action = '', submitLabel, error = null }: Props = $props();
 
 	// Form state is seeded from props; the parent remounts the form (via {#key}) to reset it.
 	// svelte-ignore state_referenced_locally
@@ -44,13 +43,6 @@
 	const shownImage = $derived(
 		photoPreview ?? (removePhoto ? null : (photoUrl ?? v.imageUrl ?? null))
 	);
-
-	const STYLE_SUGGESTIONS = [
-		'Blonde', 'Blanche', 'Ambrée', 'Brune', 'IPA', 'NEIPA', 'Double IPA', 'Pale Ale', 'Lager',
-		'Pils', 'Stout', 'Imperial Stout', 'Porter', 'Triple', 'Abbaye', 'Trappiste', 'Saison',
-		'Sour', 'Gueuze', 'Kriek', 'Fruitée', 'Sans alcool'
-	];
-	const allStyles = $derived([...new Set([...STYLE_SUGGESTIONS, ...styles])].sort());
 
 	async function onPhoto(e: Event) {
 		const file = (e.currentTarget as HTMLInputElement).files?.[0];
@@ -122,14 +114,28 @@
 		>
 	{/if}
 
+	<fieldset>
+		<legend class="label">Style</legend>
+		<input type="hidden" name="style" value={v.style ?? ''} />
+		<div class="flex flex-wrap gap-2">
+			{#each STYLES as s (s.name)}
+				{@const selected = v.style === s.name}
+				<button
+					type="button"
+					aria-pressed={selected}
+					class="flex items-center gap-2 rounded-full py-1.5 pr-3.5 pl-2.5 text-[15px] font-medium {selected
+						? 'bg-ink text-paper'
+						: 'bg-field text-ink'}"
+					onclick={() => (v.style = selected ? null : s.name)}
+				>
+					<span class="h-3.5 w-3.5 rounded-full ring-1 ring-black/15" style="background:{s.color}"></span>
+					{s.name}
+				</button>
+			{/each}
+		</div>
+	</fieldset>
+
 	<div class="grid grid-cols-2 gap-3">
-		<label class="block">
-			<span class="label">Style</span>
-			<input class="input" name="style" list="styles" bind:value={v.style} autocomplete="off" />
-			<datalist id="styles">
-				{#each allStyles as s (s)}<option value={s}></option>{/each}
-			</datalist>
-		</label>
 		<label class="block">
 			<span class="label">Degré (% vol)</span>
 			<input class="input" name="abv" inputmode="decimal" bind:value={v.abv} autocomplete="off" />

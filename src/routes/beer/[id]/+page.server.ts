@@ -16,13 +16,7 @@ function getBeer(idParam: string) {
 
 export const load: PageServerLoad = ({ params }) => {
 	const beer = getBeer(params.id);
-	const styles = db
-		.selectDistinct({ style: schema.beers.style })
-		.from(schema.beers)
-		.all()
-		.map((r) => r.style)
-		.filter((s): s is string => !!s);
-	return { beer, styles };
+	return { beer };
 };
 
 export const actions: Actions = {

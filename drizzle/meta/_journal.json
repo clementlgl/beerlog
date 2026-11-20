@@ -15,6 +15,13 @@
       "when": 1795183245122,
       "tag": "0001_rating_out_of_10",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1795184063380,
+      "tag": "0002_simplify_styles",
+      "breakpoints": true
     }
   ]
 }

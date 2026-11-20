@@ -1,3 +1,5 @@
+import type { StyleName } from '#lib/styles.ts';
+
 /** Open Food Facts client (server side: sets User-Agent, avoids CORS). */
 const UA = 'BeerLog/0.1 (self-hosted beer journal)';
 const PRODUCT_FIELDS =
@@ -13,40 +15,38 @@ export type BeerInfo = {
 	imageUrl: string | null;
 };
 
-// Most specific first.
-const STYLES: [string, string][] = [
-	['en:non-alcoholic-beers', 'Sans alcool'],
-	['en:trappist-beers', 'Trappiste'],
-	['en:abbey-beers', 'Abbaye'],
-	['en:abbey-ales', 'Abbaye'],
-	['en:double-ipa', 'Double IPA'],
-	['en:neipa', 'NEIPA'],
+// Open Food Facts category → one of our STYLES. Most specific first; first match wins.
+const STYLE_TAGS: [string, StyleName][] = [
+	['en:imperial-stouts', 'Stout'],
+	['en:stouts', 'Stout'],
+	['en:porters', 'Stout'],
+	['en:red-ipa', 'IPA'],
+	['en:double-ipa', 'IPA'],
+	['en:neipa', 'IPA'],
 	['en:ipa', 'IPA'],
 	['ca:cervesa-ipa', 'IPA'],
 	['en:india-pale-ales', 'IPA'],
-	['en:imperial-stouts', 'Imperial Stout'],
-	['en:stouts', 'Stout'],
-	['en:porters', 'Porter'],
-	['en:sour-beers', 'Sour'],
-	['en:gueuze', 'Gueuze'],
-	['en:lambics', 'Lambic'],
-	['en:kriek', 'Kriek'],
-	['en:saisons', 'Saison'],
-	['en:tripel-beers', 'Triple'],
-	['en:triple-beers', 'Triple'],
-	['en:dubbel-beers', 'Double'],
-	['en:pilsners', 'Pils'],
-	['en:pils', 'Pils'],
-	['en:white-beers', 'Blanche'],
-	['en:wheat-beers', 'Blanche'],
+	['en:pale-ales', 'IPA'],
+	['en:kriek', 'Fruitée'],
 	['en:beers-with-fruits', 'Fruitée'],
 	['en:fruit-beers', 'Fruitée'],
+	['en:sour-beers', 'Fruitée'],
+	['en:gueuze', 'Fruitée'],
+	['en:lambics', 'Fruitée'],
+	['en:tripel-beers', 'Triple'],
+	['en:triple-beers', 'Triple'],
+	['en:dubbel-beers', 'Brune'],
+	['en:white-beers', 'Blanche'],
+	['en:wheat-beers', 'Blanche'],
+	['en:irish-red-ales', 'Rousse'],
+	['en:red-ales', 'Rousse'],
 	['en:amber-beers', 'Ambrée'],
 	['en:dark-beers', 'Brune'],
 	['en:brown-beers', 'Brune'],
 	['en:blond-beers', 'Blonde'],
-	['en:pale-ales', 'Pale Ale'],
-	['en:ales', 'Ale'],
+	['en:saisons', 'Blonde'],
+	['en:pilsners', 'Lager'],
+	['en:pils', 'Lager'],
 	['en:lagers', 'Lager']
 ];
 
@@ -67,8 +67,8 @@ const COUNTRY_BEERS: Record<string, string> = {
 	'en:danish-beers': 'Danemark'
 };
 
-function pickStyle(tags: string[] = []): string | null {
-	for (const [tag, label] of STYLES) if (tags.includes(tag)) return label;
+function pickStyle(tags: string[] = []): StyleName | null {
+	for (const [tag, style] of STYLE_TAGS) if (tags.includes(tag)) return style;
 	return null;
 }
 

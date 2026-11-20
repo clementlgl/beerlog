@@ -17,7 +17,7 @@
 	{@render children()}
 </main>
 
-{#if page.url.pathname !== '/add'}
+{#if page.url.pathname === '/'}
 	<a
 		href="/add"
 		class="fixed right-[max(1.25rem,calc(50vw-21rem+1.25rem))] bottom-[calc(1.25rem+env(safe-area-inset-bottom))] z-40 grid h-16 w-16 place-items-center rounded-full bg-ink text-paper shadow-[0_10px_24px_-8px_rgba(58,36,24,0.55)] active:scale-95"

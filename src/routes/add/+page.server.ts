@@ -8,13 +8,7 @@ import type { Actions, PageServerLoad } from './$types';
 export const load: PageServerLoad = () => {
 	const b = schema.beers;
 	return {
-		known: db.select({ id: b.id, name: b.name, barcode: b.barcode }).from(b).all(),
-		styles: db
-			.selectDistinct({ style: b.style })
-			.from(b)
-			.all()
-			.map((r) => r.style)
-			.filter((s): s is string => !!s)
+		known: db.select({ id: b.id, name: b.name, barcode: b.barcode }).from(b).all()
 	};
 };
 

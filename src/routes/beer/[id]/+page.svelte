@@ -3,7 +3,7 @@
 	import { page } from '$app/state';
 	import BeerForm from '#lib/components/BeerForm.svelte';
 	import Glass from '#lib/components/Glass.svelte';
-	import { beerColor } from '#lib/beer-color.ts';
+	import { beerColor } from '#lib/styles.ts';
 	import { fr } from '#lib/format.ts';
 	import type { PageProps } from './$types';
 
@@ -45,7 +45,6 @@
 		action="?/update"
 		submitLabel="Enregistrer les modifications"
 		error={form?.error}
-		styles={data.styles}
 	/>
 	<form
 		method="POST"

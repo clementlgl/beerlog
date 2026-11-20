@@ -1,4 +1,5 @@
 import type { NewBeer } from './db/schema';
+import { findStyle } from '#lib/styles.ts';
 
 export type BeerFormValues = {
 	barcode: string;
@@ -37,6 +38,8 @@ export function toFields(
 	const abv = v.abv ? Number(v.abv.replace(',', '.')) : null;
 	if (abv !== null && (!Number.isFinite(abv) || abv < 0 || abv > 70))
 		return { error: 'Degré d’alcool invalide.' };
+	const style = v.style ? findStyle(v.style) : null;
+	if (v.style && !style) return { error: 'Style inconnu.' };
 	const rating = v.rating ? Number(v.rating) : null;
 	if (rating !== null && !(Number.isInteger(rating) && rating >= 1 && rating <= 10))
 		return { error: 'Note invalide.' };
@@ -45,7 +48,7 @@ export function toFields(
 			barcode: v.barcode || null,
 			name: v.name,
 			brewery: v.brewery || null,
-			style: v.style || null,
+			style: style?.name ?? null,
 			abv,
 			country: v.country || null,
 			rating,

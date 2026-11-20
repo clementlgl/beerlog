@@ -1,0 +1,31 @@
+-- Styles reduced to a fixed list of 10. Map older free-text styles, drop the rest.
+UPDATE `beers` SET `style` = CASE lower(trim(`style`))
+	WHEN 'blanche' THEN 'Blanche'
+	WHEN 'lager' THEN 'Lager'
+	WHEN 'pils' THEN 'Lager'
+	WHEN 'blonde' THEN 'Blonde'
+	WHEN 'abbaye' THEN 'Blonde'
+	WHEN 'saison' THEN 'Blonde'
+	WHEN 'triple' THEN 'Triple'
+	WHEN 'trappiste' THEN 'Triple'
+	WHEN 'ipa' THEN 'IPA'
+	WHEN 'neipa' THEN 'IPA'
+	WHEN 'double ipa' THEN 'IPA'
+	WHEN 'red ipa' THEN 'IPA'
+	WHEN 'pale ale' THEN 'IPA'
+	WHEN 'ambrée' THEN 'Ambrée'
+	WHEN 'ale' THEN 'Ambrée'
+	WHEN 'rousse' THEN 'Rousse'
+	WHEN 'fruitée' THEN 'Fruitée'
+	WHEN 'kriek' THEN 'Fruitée'
+	WHEN 'gueuze' THEN 'Fruitée'
+	WHEN 'lambic' THEN 'Fruitée'
+	WHEN 'sour' THEN 'Fruitée'
+	WHEN 'brune' THEN 'Brune'
+	WHEN 'double' THEN 'Brune'
+	WHEN 'stout' THEN 'Stout'
+	WHEN 'imperial stout' THEN 'Stout'
+	WHEN 'porter' THEN 'Stout'
+	ELSE NULL
+END
+WHERE `style` IS NOT NULL;

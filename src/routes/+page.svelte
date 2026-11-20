@@ -3,7 +3,7 @@
 	import Glass from '#lib/components/Glass.svelte';
 	import Scanner from '#lib/components/Scanner.svelte';
 	import { norm } from '#lib/normalize.ts';
-	import { FAMILIES, beerFamily, type FamilyId } from '#lib/beer-color.ts';
+	import { FAMILIES, beerFamily, type FamilyId } from '#lib/styles.ts';
 	import { fr } from '#lib/format.ts';
 	import type { PageProps } from './$types';
 
