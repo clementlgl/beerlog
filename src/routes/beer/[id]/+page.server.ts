@@ -20,7 +20,7 @@ export const load: PageServerLoad = ({ params }) => {
 };
 
 export const actions: Actions = {
-	update: async ({ request, params, locals }) => {
+	update: async ({ request, params }) => {
 		const beer = getBeer(params.id);
 		const form = await request.formData();
 		const values = readForm(form);
@@ -44,7 +44,7 @@ export const actions: Actions = {
 		}
 
 		db.update(schema.beers)
-			.set({ ...parsed.fields, photo, updatedBy: locals.user.login, updatedAt: new Date() })
+			.set({ ...parsed.fields, photo, updatedAt: new Date() })
 			.where(eq(schema.beers.id, beer.id))
 			.run();
 		redirect(303, `/beer/${beer.id}`);

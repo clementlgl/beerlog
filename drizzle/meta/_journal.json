@@ -22,6 +22,13 @@
       "when": 1795184063380,
       "tag": "0002_simplify_styles",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1795200566227,
+      "tag": "0003_drop_authors",
+      "breakpoints": true
     }
   ]
 }

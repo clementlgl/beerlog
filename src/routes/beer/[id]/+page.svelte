@@ -25,7 +25,6 @@
 
 	const fmt = (d: Date) =>
 		new Date(d).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
-	const who = (login: string) => login.split('@')[0];
 </script>
 
 <a href="/" class="mt-2 mb-4 inline-block text-sm text-soft">← Toutes les bières</a>
@@ -103,9 +102,9 @@
 		{/if}
 
 		<p class="mt-5 text-sm text-soft">
-			Ajoutée par {who(beer.createdBy)} le {fmt(beer.createdAt)}.
+			Ajoutée le {fmt(beer.createdAt)}.
 			{#if beer.updatedAt.getTime() !== beer.createdAt.getTime()}
-				Modifiée par {who(beer.updatedBy)} le {fmt(beer.updatedAt)}.
+				Modifiée le {fmt(beer.updatedAt)}.
 			{/if}
 			{#if beer.barcode}<br />Code-barres {beer.barcode}{/if}
 		</p>

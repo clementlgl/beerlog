@@ -3,14 +3,13 @@
 	import { page } from '$app/state';
 	import type { LayoutProps } from './$types';
 
-	let { children, data }: LayoutProps = $props();
+	let { children }: LayoutProps = $props();
 </script>
 
 <header class="bg-paper pt-[env(safe-area-inset-top)]">
 	<div class="mx-auto flex max-w-2xl items-center justify-between px-5 pt-5 pb-2">
 		<a href="/" class="text-[26px] leading-none font-extrabold tracking-[-0.02em]">BeerLog</a>
 		<div class="flex items-center gap-4">
-			<span class="hidden text-sm text-soft sm:inline">{data.user.name}</span>
 			{#if page.url.pathname !== '/stats'}
 				<a href="/stats" class="text-[15px] font-semibold text-soft">Statistiques</a>
 			{/if}

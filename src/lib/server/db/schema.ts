@@ -15,9 +15,7 @@ export const beers = sqliteTable(
 		/** Shared rating, whole points from 1 to 10; null = not rated */
 		rating: real('rating'),
 		comment: text('comment'),
-		createdBy: text('created_by').notNull(),
 		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
-		updatedBy: text('updated_by').notNull(),
 		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 	},
 	(t) => [index('beers_name_idx').on(t.name)]

@@ -13,7 +13,7 @@ export const load: PageServerLoad = () => {
 };
 
 export const actions: Actions = {
-	default: async ({ request, locals }) => {
+	default: async ({ request }) => {
 		const form = await request.formData();
 		const values = readForm(form);
 		const parsed = toFields(values);
@@ -35,9 +35,7 @@ export const actions: Actions = {
 			.values({
 				...parsed.fields,
 				photo,
-				createdBy: locals.user.login,
 				createdAt: now,
-				updatedBy: locals.user.login,
 				updatedAt: now
 			})
 			.returning({ id: schema.beers.id })

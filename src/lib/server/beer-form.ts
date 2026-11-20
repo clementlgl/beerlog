@@ -32,7 +32,7 @@ export function readForm(f: FormData): BeerFormValues {
 /** Validate and convert to DB fields. Returns an error message or the fields. */
 export function toFields(
 	v: BeerFormValues
-): { error: string } | { fields: Omit<NewBeer, 'createdBy' | 'createdAt' | 'updatedBy' | 'updatedAt'> } {
+): { error: string } | { fields: Omit<NewBeer, 'createdAt' | 'updatedAt'> } {
 	if (!v.name) return { error: 'Le nom est obligatoire.' };
 	if (v.barcode && !/^\d{6,14}$/.test(v.barcode)) return { error: 'Code-barres invalide.' };
 	const abv = v.abv ? Number(v.abv.replace(',', '.')) : null;
