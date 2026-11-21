@@ -1,11 +1,13 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { openBarcodeCamera, refocus } from '#lib/camera.ts';
 
 	type Props = { ondetect: (code: string) => void; onclose: () => void };
 	let { ondetect, onclose }: Props = $props();
 
 	let video: HTMLVideoElement;
 	let error = $state<string | null>(null);
+	let stream: MediaStream | null = null;
 
 	const FORMATS = ['ean_13', 'ean_8', 'upc_a', 'upc_e'] as const;
 
@@ -32,7 +34,6 @@
 	}
 
 	onMount(() => {
-		let stream: MediaStream | null = null;
 		let timer: ReturnType<typeof setTimeout>;
 		let stopped = false;
 
@@ -42,15 +43,12 @@
 				return;
 			}
 			try {
-				stream = await navigator.mediaDevices.getUserMedia({
-					video: { facingMode: 'environment', width: { ideal: 1280 } },
-					audio: false
-				});
+				stream = await openBarcodeCamera();
 			} catch {
 				error = 'Accès à la caméra refusé.';
 				return;
 			}
-			if (stopped) return stream.getTracks().forEach((t) => t.stop());
+			if (stopped) return stream?.getTracks().forEach((t) => t.stop());
 			video.srcObject = stream;
 			await video.play();
 			const detector = await makeDetector();
@@ -83,7 +81,13 @@
 <div class="fixed inset-0 z-50 flex flex-col bg-black">
 	<div class="relative flex-1 overflow-hidden">
 		<!-- svelte-ignore a11y_media_has_caption -->
-		<video bind:this={video} class="h-full w-full object-cover" playsinline muted></video>
+		<video
+			bind:this={video}
+			class="h-full w-full object-cover"
+			playsinline
+			muted
+			onclick={() => refocus(stream)}
+		></video>
 		<div class="pointer-events-none absolute inset-0 flex items-center justify-center">
 			<div class="h-32 w-72 rounded-xl border-4 border-white/90 shadow-[0_0_0_9999px_rgba(0,0,0,0.45)]"></div>
 		</div>
@@ -92,7 +96,7 @@
 		{/if}
 	</div>
 	<div class="flex items-center justify-between gap-4 p-4 text-white">
-		<p class="text-sm opacity-80">Visez le code-barres de la bouteille ou canette</p>
+		<p class="text-sm opacity-80">Tenez le code-barres à 15–20 cm. Touchez l’image pour refaire la mise au point.</p>
 		<button class="rounded-lg bg-white/15 px-4 py-2 font-medium" onclick={onclose}>Fermer</button>
 	</div>
 </div>
