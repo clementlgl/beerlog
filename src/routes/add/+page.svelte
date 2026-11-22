@@ -48,7 +48,7 @@
 			if (body.existing) {
 				existing = body.existing;
 			} else if (body.info) {
-				setValues({ ...body.info, rating: null, comment: '' });
+				setValues({ ...body.info });
 				message = 'Infos récupérées sur Open Food Facts. Vérifiez-les avant d’enregistrer.';
 			} else {
 				setValues({ barcode: code });

@@ -8,8 +8,10 @@ export type BeerFormValues = {
 	style: string;
 	abv: string;
 	country: string;
-	rating: string;
-	comment: string;
+	ratingSeb: string;
+	ratingClem: string;
+	commentSeb: string;
+	commentClem: string;
 	imageUrl: string;
 };
 
@@ -23,10 +25,19 @@ export function readForm(f: FormData): BeerFormValues {
 		style: str(f, 'style'),
 		abv: str(f, 'abv'),
 		country: str(f, 'country'),
-		rating: str(f, 'rating'),
-		comment: str(f, 'comment'),
+		ratingSeb: str(f, 'ratingSeb'),
+		ratingClem: str(f, 'ratingClem'),
+		commentSeb: str(f, 'commentSeb'),
+		commentClem: str(f, 'commentClem'),
 		imageUrl: str(f, 'imageUrl')
 	};
+}
+
+/** Whole points from 1 to 10; null = not rated, undefined = invalid. */
+function parseRating(s: string): number | null | undefined {
+	if (!s) return null;
+	const n = Number(s);
+	return Number.isInteger(n) && n >= 1 && n <= 10 ? n : undefined;
 }
 
 /** Validate and convert to DB fields. Returns an error message or the fields. */
@@ -40,9 +51,9 @@ export function toFields(
 		return { error: 'Degré d’alcool invalide.' };
 	const style = v.style ? findStyle(v.style) : null;
 	if (v.style && !style) return { error: 'Style inconnu.' };
-	const rating = v.rating ? Number(v.rating) : null;
-	if (rating !== null && !(Number.isInteger(rating) && rating >= 1 && rating <= 10))
-		return { error: 'Note invalide.' };
+	const ratingSeb = parseRating(v.ratingSeb);
+	const ratingClem = parseRating(v.ratingClem);
+	if (ratingSeb === undefined || ratingClem === undefined) return { error: 'Note invalide.' };
 	return {
 		fields: {
 			barcode: v.barcode || null,
@@ -51,8 +62,10 @@ export function toFields(
 			style: style?.name ?? null,
 			abv,
 			country: v.country || null,
-			rating,
-			comment: v.comment || null
+			ratingSeb,
+			ratingClem,
+			commentSeb: v.commentSeb || null,
+			commentClem: v.commentClem || null
 		}
 	};
 }

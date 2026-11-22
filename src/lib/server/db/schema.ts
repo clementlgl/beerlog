@@ -12,9 +12,11 @@ export const beers = sqliteTable(
 		country: text('country'),
 		/** Local photo filename inside DATA_DIR/photos */
 		photo: text('photo'),
-		/** Shared rating, whole points from 1 to 10; null = not rated */
-		rating: real('rating'),
-		comment: text('comment'),
+		/** Per-person ratings, whole points from 1 to 10; null = not rated */
+		ratingSeb: real('rating_seb'),
+		ratingClem: real('rating_clem'),
+		commentSeb: text('comment_seb'),
+		commentClem: text('comment_clem'),
 		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 	},

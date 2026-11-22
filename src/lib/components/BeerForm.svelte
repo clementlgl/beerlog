@@ -6,8 +6,10 @@
 		style?: string | null;
 		abv?: number | string | null;
 		country?: string | null;
-		rating?: number | string | null;
-		comment?: string | null;
+		ratingSeb?: number | string | null;
+		ratingClem?: number | string | null;
+		commentSeb?: string | null;
+		commentClem?: string | null;
 		imageUrl?: string | null;
 	};
 </script>
@@ -18,6 +20,8 @@
 	import Glass from './Glass.svelte';
 	import { STYLES } from '#lib/styles.ts';
 	import { resizeImage } from '#lib/resize.ts';
+	import { PEOPLE, averageRating, type PersonKey } from '#lib/people.ts';
+	import { fr } from '#lib/format.ts';
 
 
 	type Props = {
@@ -33,8 +37,13 @@
 	// Form state is seeded from props; the parent remounts the form (via {#key}) to reset it.
 	// svelte-ignore state_referenced_locally
 	let v = $state({ ...values });
+	const num = (x: number | string | null | undefined) => (x ? Number(x) : null);
 	// svelte-ignore state_referenced_locally
-	let rating = $state<number | null>(values.rating ? Number(values.rating) : null);
+	let ratings = $state<Record<PersonKey, number | null>>({
+		Seb: num(values.ratingSeb),
+		Clem: num(values.ratingClem)
+	});
+	const average = $derived(averageRating({ ratingSeb: ratings.Seb, ratingClem: ratings.Clem }));
 	let photoBlob = $state<Blob | null>(null);
 	let photoPreview = $state<string | null>(null);
 	let removePhoto = $state(false);
@@ -70,7 +79,9 @@
 	}}
 >
 	<input type="hidden" name="imageUrl" value={removePhoto || photoBlob ? '' : (v.imageUrl ?? '')} />
-	<input type="hidden" name="rating" value={rating ?? ''} />
+	{#each PEOPLE as p (p.key)}
+		<input type="hidden" name="rating{p.key}" value={ratings[p.key] ?? ''} />
+	{/each}
 	<input type="hidden" name="removePhoto" value={removePhoto ? '1' : ''} />
 
 	<div class="flex items-start gap-4">
@@ -150,23 +161,32 @@
 		</label>
 	</div>
 
-	<div>
-		<div class="mb-2 flex items-end gap-3">
-			<Glass {rating} style={v.style ?? null} height={64} />
-			<div class="pb-1">
-				<span class="label mb-0">Note</span>
-				<span class="text-2xl leading-none font-extrabold">
-					{#if rating}{rating}<span class="ml-1 text-base font-semibold text-soft">sur 10</span>{:else}<span class="text-base font-semibold text-soft">Non notée</span>{/if}
-				</span>
-			</div>
+	<div class="flex items-end gap-3">
+		<Glass rating={average} style={v.style ?? null} height={64} />
+		<div class="pb-1">
+			<span class="label mb-0">Moyenne</span>
+			<span class="text-2xl leading-none font-extrabold">
+				{#if average}{fr(average)}<span class="ml-1 text-base font-semibold text-soft">sur 10</span>{:else}<span class="text-base font-semibold text-soft">Non notée</span>{/if}
+			</span>
 		</div>
-		<RatingInput value={rating} onchange={(r) => (rating = r)} />
 	</div>
 
-	<label class="block">
-		<span class="label">Commentaire</span>
-		<textarea class="input min-h-24" name="comment" bind:value={v.comment}></textarea>
-	</label>
+	{#each PEOPLE as p (p.key)}
+		{@const r = ratings[p.key]}
+		<fieldset class="space-y-2">
+			<legend class="label">
+				{p.name} : {#if r}<span class="font-extrabold text-ink">{r} sur 10</span>{:else}non notée{/if}
+			</legend>
+			<RatingInput value={r} onchange={(n) => (ratings[p.key] = n)} />
+			<textarea
+				class="input min-h-20"
+				name="comment{p.key}"
+				placeholder="Commentaire de {p.name}"
+				aria-label="Commentaire de {p.name}"
+				bind:value={v[`comment${p.key}`]}
+			></textarea>
+		</fieldset>
+	{/each}
 
 	{#if error}
 		<p class="rounded-xl bg-field p-3 font-medium text-danger">{error}</p>

@@ -134,7 +134,9 @@
 					{#if b.rating}
 						<div class="text-right">
 							<span class="block text-[22px] leading-none font-extrabold">{fr(b.rating)}</span>
-							<span class="text-[11px] text-soft">sur 10</span>
+							<span class="text-[11px] whitespace-nowrap text-soft"
+								>Séb {b.ratingSeb ?? '–'} · Clem {b.ratingClem ?? '–'}</span
+							>
 						</div>
 					{:else}
 						<span class="text-[13px] font-semibold text-soft">à noter</span>

@@ -4,7 +4,7 @@ Journal de dégustation de bières, partagé entre amis, auto-hébergé sur Prox
 
 - Liste commune des bières goûtées, recherche instantanée (sans accents) → « déjà goûtée ? »
 - Scan du code-barres (caméra) ou recherche par nom → infos récupérées sur **Open Food Facts**
-- 10 styles fixes (Blanche → Stout), une note commune sur 10, un commentaire, une photo
+- 10 styles fixes (Blanche → Stout), une note sur 10 et un commentaire pour Sébastien et pour Clément (moyenne affichée), une photo
 - Page de statistiques (répartition par style, top 5, notes par style)
 - PWA installable sur l'écran d'accueil
 
