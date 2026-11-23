@@ -43,7 +43,7 @@ function parseRating(s: string): number | null | undefined {
 /** Validate and convert to DB fields. Returns an error message or the fields. */
 export function toFields(
 	v: BeerFormValues
-): { error: string } | { fields: Omit<NewBeer, 'createdAt' | 'updatedAt'> } {
+): { error: string } | { fields: Omit<NewBeer, 'createdAt' | 'updatedAt' | 'ratedAt1' | 'ratedAt2'> } {
 	if (!v.name) return { error: 'Le nom est obligatoire.' };
 	if (v.barcode && !/^\d{6,14}$/.test(v.barcode)) return { error: 'Code-barres invalide.' };
 	const abv = v.abv ? Number(v.abv.replace(',', '.')) : null;
@@ -68,4 +68,17 @@ export function toFields(
 			comment2: v.comment2 || null
 		}
 	};
+}
+
+type Ratings = { rating1?: number | null; rating2?: number | null };
+type RatingDates = { ratedAt1: Date | null; ratedAt2: Date | null };
+
+/** Rating dates after a save: kept when a rating is unchanged, `now` when it is new or changed, null when cleared. */
+export function ratingDates(next: Ratings, now: Date, prev?: Ratings & RatingDates): RatingDates {
+	const date = (key: 1 | 2) => {
+		const r = next[`rating${key}`];
+		if (r == null) return null;
+		return prev && prev[`rating${key}`] === r ? prev[`ratedAt${key}`] ?? now : now;
+	};
+	return { ratedAt1: date(1), ratedAt2: date(2) };
 }

@@ -1,7 +1,7 @@
 import { fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
-import { readForm, toFields } from '#lib/server/beer-form.ts';
+import { ratingDates, readForm, toFields } from '#lib/server/beer-form.ts';
 import { photoFromForm } from '#lib/server/save.ts';
 import type { Actions, PageServerLoad } from './$types';
 
@@ -34,6 +34,7 @@ export const actions: Actions = {
 			.insert(schema.beers)
 			.values({
 				...parsed.fields,
+				...ratingDates(parsed.fields, now),
 				photo,
 				createdAt: now,
 				updatedAt: now

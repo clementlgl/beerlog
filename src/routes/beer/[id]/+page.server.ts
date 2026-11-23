@@ -1,7 +1,7 @@
 import { error, fail, redirect } from '@sveltejs/kit';
 import { and, eq, ne } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
-import { readForm, toFields } from '#lib/server/beer-form.ts';
+import { ratingDates, readForm, toFields } from '#lib/server/beer-form.ts';
 import { photoFromForm } from '#lib/server/save.ts';
 import { deletePhoto } from '#lib/server/photos.ts';
 import type { Actions, PageServerLoad } from './$types';
@@ -43,8 +43,9 @@ export const actions: Actions = {
 			photo = newPhoto;
 		}
 
+		const now = new Date();
 		db.update(schema.beers)
-			.set({ ...parsed.fields, photo, updatedAt: new Date() })
+			.set({ ...parsed.fields, ...ratingDates(parsed.fields, now, beer), photo, updatedAt: now })
 			.where(eq(schema.beers.id, beer.id))
 			.run();
 		redirect(303, `/beer/${beer.id}`);
