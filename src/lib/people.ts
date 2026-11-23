@@ -1,9 +1,9 @@
 /** The two tasters. `key` matches the `rating*` / `comment*` beer fields. */
-export type Person = { key: 1 | 2; name: string; short: string };
+export type Person = { key: 1 | 2; name: string };
 
 export const DEFAULT_PEOPLE: Person[] = [
-	{ key: 1, name: 'Sébastien', short: 'Séb' },
-	{ key: 2, name: 'Clément', short: 'Clem' }
+	{ key: 1, name: 'Sébastien' },
+	{ key: 2, name: 'Clément' }
 ];
 
 /** Average of the ratings that are set; null when nobody rated. */

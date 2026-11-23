@@ -68,7 +68,7 @@
 						{fr(average)}<span class="ml-1.5 text-xl font-semibold text-soft">sur 10</span>
 					</p>
 					<p class="mt-1.5 text-sm text-soft">
-						{#each data.people as p, i (p.key)}{#if i}{' · '}{/if}{p.short}
+						{#each data.people as p, i (p.key)}{#if i}{' · '}{/if}{p.name}
 							<span class="font-semibold text-ink">{beer[`rating${p.key}`] ?? '—'}</span>{/each}
 					</p>
 				{:else}
