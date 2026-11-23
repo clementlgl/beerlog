@@ -1,13 +1,22 @@
 import { db, schema } from '#lib/server/db/index.ts';
 import { STYLES, findStyle } from '#lib/styles.ts';
+import { averageRating } from '#lib/people.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = () => {
 	const b = schema.beers;
 	const beers = db
-		.select({ id: b.id, name: b.name, brewery: b.brewery, style: b.style, rating: b.rating })
+		.select({
+			id: b.id,
+			name: b.name,
+			brewery: b.brewery,
+			style: b.style,
+			rating1: b.rating1,
+			rating2: b.rating2
+		})
 		.from(b)
-		.all();
+		.all()
+		.map((x) => ({ ...x, rating: averageRating(x) }));
 
 	// One entry per style (pale → dark) plus "no style", keeping only those with beers.
 	const groups = [...STYLES.map((s) => s.name), null].map((name) => {

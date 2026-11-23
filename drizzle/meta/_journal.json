@@ -29,6 +29,20 @@
       "when": 1795200566227,
       "tag": "0003_drop_authors",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1795446225816,
+      "tag": "0004_per_person_ratings",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1795446231080,
+      "tag": "0005_drop_shared_rating",
+      "breakpoints": true
     }
   ]
 }

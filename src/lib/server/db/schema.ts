@@ -12,9 +12,11 @@ export const beers = sqliteTable(
 		country: text('country'),
 		/** Local photo filename inside DATA_DIR/photos */
 		photo: text('photo'),
-		/** Shared rating, whole points from 1 to 10; null = not rated */
-		rating: real('rating'),
-		comment: text('comment'),
+		/** Per-person ratings (person 1 and 2, see settings), whole points from 1 to 10; null = not rated */
+		rating1: real('rating_1'),
+		rating2: real('rating_2'),
+		comment1: text('comment_1'),
+		comment2: text('comment_2'),
 		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 	},
@@ -23,3 +25,9 @@ export const beers = sqliteTable(
 
 export type Beer = typeof beers.$inferSelect;
 export type NewBeer = typeof beers.$inferInsert;
+
+/** Key/value app settings (e.g. the tasters' names). */
+export const settings = sqliteTable('settings', {
+	key: text('key').primaryKey(),
+	value: text('value').notNull()
+});

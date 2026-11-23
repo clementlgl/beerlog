@@ -5,12 +5,14 @@
 	import Glass from '#lib/components/Glass.svelte';
 	import { beerColor } from '#lib/styles.ts';
 	import { fr } from '#lib/format.ts';
+	import { averageRating } from '#lib/people.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
 
 	let editing = $state(false);
 	const beer = $derived(data.beer);
+	const average = $derived(averageRating(beer));
 	const scanned = $derived(page.url.searchParams.has('scanned'));
 
 	// Leave edit mode once the saved beer comes back from the server.
@@ -44,6 +46,7 @@
 		action="?/update"
 		submitLabel="Enregistrer les modifications"
 		error={form?.error}
+		people={data.people}
 	/>
 	<form
 		method="POST"
@@ -58,11 +61,15 @@
 {:else}
 	<article>
 		<div class="flex items-end gap-5">
-			<Glass rating={beer.rating} style={beer.style} height={112} />
+			<Glass rating={average} style={beer.style} height={112} />
 			<div class="min-w-0 pb-1">
-				{#if beer.rating}
+				{#if average}
 					<p class="text-5xl leading-none font-extrabold tracking-[-0.03em]">
-						{fr(beer.rating)}<span class="ml-1.5 text-xl font-semibold text-soft">sur 10</span>
+						{fr(average)}<span class="ml-1.5 text-xl font-semibold text-soft">sur 10</span>
+					</p>
+					<p class="mt-1.5 text-sm text-soft">
+						{#each data.people as p, i (p.key)}{#if i}{' · '}{/if}{p.name}
+							<span class="font-semibold text-ink">{beer[`rating${p.key}`] ?? '—'}</span>{/each}
 					</p>
 				{:else}
 					<p class="text-lg font-semibold text-soft">Pas encore notée</p>
@@ -93,9 +100,15 @@
 			</div>
 		</dl>
 
-		{#if beer.comment}
-			<p class="mt-5 text-lg leading-relaxed whitespace-pre-line">{beer.comment}</p>
-		{/if}
+		{#each data.people as p (p.key)}
+			{@const comment = beer[`comment${p.key}`]}
+			{#if comment}
+				<div class="mt-5">
+					<p class="text-sm font-semibold text-soft">{p.name}</p>
+					<p class="text-lg leading-relaxed whitespace-pre-line">{comment}</p>
+				</div>
+			{/if}
+		{/each}
 
 		{#if beer.photo}
 			<img src="/photos/{beer.photo}" alt={beer.name} class="mt-6 max-h-96 w-full rounded-2xl bg-field object-contain" />

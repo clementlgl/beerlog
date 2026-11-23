@@ -1,5 +1,6 @@
 import { desc } from 'drizzle-orm';
 import { db, schema } from '#lib/server/db/index.ts';
+import { averageRating } from '#lib/people.ts';
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = () => {
@@ -13,12 +14,13 @@ export const load: PageServerLoad = () => {
 			abv: b.abv,
 			country: b.country,
 			photo: b.photo,
-			rating: b.rating,
+			rating1: b.rating1,
+			rating2: b.rating2,
 			barcode: b.barcode,
 			createdAt: b.createdAt
 		})
 		.from(b)
 		.orderBy(desc(b.createdAt))
 		.all();
-	return { beers };
+	return { beers: beers.map((x) => ({ ...x, rating: averageRating(x) })) };
 };
