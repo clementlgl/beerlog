@@ -13,6 +13,10 @@
 	let editing = $state(false);
 	const beer = $derived(data.beer);
 	const average = $derived(averageRating(beer));
+	/** Latest rating date among the tasters. */
+	const ratedAt = $derived(
+		[beer.ratedAt1, beer.ratedAt2].filter((d): d is Date => d != null).sort((a, b) => +b - +a)[0]
+	);
 	const scanned = $derived(page.url.searchParams.has('scanned'));
 
 	// Leave edit mode once the saved beer comes back from the server.
@@ -115,10 +119,8 @@
 		{/if}
 
 		<p class="mt-5 text-sm text-soft">
-			Ajoutée le {fmt(beer.createdAt)}.
-			{#if beer.updatedAt.getTime() !== beer.createdAt.getTime()}
-				Modifiée le {fmt(beer.updatedAt)}.
-			{/if}
+			Ajoutée : {fmt(beer.createdAt)}
+			{#if ratedAt}<br />Notée : {fmt(ratedAt)}{/if}
 			{#if beer.barcode}<br />Code-barres {beer.barcode}{/if}
 		</p>
 	</article>

@@ -17,6 +17,9 @@ export const beers = sqliteTable(
 		rating2: real('rating_2'),
 		comment1: text('comment_1'),
 		comment2: text('comment_2'),
+		/** When each person last set or changed their rating; null = not rated */
+		ratedAt1: integer('rated_at_1', { mode: 'timestamp' }),
+		ratedAt2: integer('rated_at_2', { mode: 'timestamp' }),
 		createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 		updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 	},

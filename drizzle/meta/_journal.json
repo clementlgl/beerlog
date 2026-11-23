@@ -43,6 +43,13 @@
       "when": 1795446231080,
       "tag": "0005_drop_shared_rating",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1795446815456,
+      "tag": "0006_rating_dates",
+      "breakpoints": true
     }
   ]
 }
