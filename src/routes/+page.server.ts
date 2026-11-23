@@ -14,8 +14,8 @@ export const load: PageServerLoad = () => {
 			abv: b.abv,
 			country: b.country,
 			photo: b.photo,
-			ratingSeb: b.ratingSeb,
-			ratingClem: b.ratingClem,
+			rating1: b.rating1,
+			rating2: b.rating2,
 			barcode: b.barcode,
 			createdAt: b.createdAt
 		})

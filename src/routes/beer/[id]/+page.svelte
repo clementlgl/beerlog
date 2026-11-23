@@ -5,7 +5,7 @@
 	import Glass from '#lib/components/Glass.svelte';
 	import { beerColor } from '#lib/styles.ts';
 	import { fr } from '#lib/format.ts';
-	import { PEOPLE, averageRating } from '#lib/people.ts';
+	import { averageRating } from '#lib/people.ts';
 	import type { PageProps } from './$types';
 
 	let { data, form }: PageProps = $props();
@@ -46,6 +46,7 @@
 		action="?/update"
 		submitLabel="Enregistrer les modifications"
 		error={form?.error}
+		people={data.people}
 	/>
 	<form
 		method="POST"
@@ -67,7 +68,7 @@
 						{fr(average)}<span class="ml-1.5 text-xl font-semibold text-soft">sur 10</span>
 					</p>
 					<p class="mt-1.5 text-sm text-soft">
-						{#each PEOPLE as p, i (p.key)}{#if i}{' · '}{/if}{p.short}
+						{#each data.people as p, i (p.key)}{#if i}{' · '}{/if}{p.short}
 							<span class="font-semibold text-ink">{beer[`rating${p.key}`] ?? '—'}</span>{/each}
 					</p>
 				{:else}
@@ -99,7 +100,7 @@
 			</div>
 		</dl>
 
-		{#each PEOPLE as p (p.key)}
+		{#each data.people as p (p.key)}
 			{@const comment = beer[`comment${p.key}`]}
 			{#if comment}
 				<div class="mt-5">

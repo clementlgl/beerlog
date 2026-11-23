@@ -182,7 +182,7 @@
 {#if !existing}
 	<section class="mt-8 border-t border-line pt-6">
 		{#key formKey}
-			<BeerForm {values} submitLabel="Enregistrer la bière" error={form?.error} />
+			<BeerForm {values} submitLabel="Enregistrer la bière" error={form?.error} people={data.people} />
 		{/key}
 	</section>
 {/if}

@@ -1,13 +1,13 @@
 /** The two tasters. `key` matches the `rating*` / `comment*` beer fields. */
-export const PEOPLE = [
-	{ key: 'Seb', name: 'Sébastien', short: 'Séb' },
-	{ key: 'Clem', name: 'Clément', short: 'Clem' }
-] as const;
+export type Person = { key: 1 | 2; name: string; short: string };
 
-export type PersonKey = (typeof PEOPLE)[number]['key'];
+export const DEFAULT_PEOPLE: Person[] = [
+	{ key: 1, name: 'Sébastien', short: 'Séb' },
+	{ key: 2, name: 'Clément', short: 'Clem' }
+];
 
 /** Average of the ratings that are set; null when nobody rated. */
-export function averageRating(r: { ratingSeb: number | null; ratingClem: number | null }) {
-	const set = [r.ratingSeb, r.ratingClem].filter((x): x is number => x != null);
+export function averageRating(r: { rating1: number | null; rating2: number | null }) {
+	const set = [r.rating1, r.rating2].filter((x): x is number => x != null);
 	return set.length ? set.reduce((a, b) => a + b, 0) / set.length : null;
 }

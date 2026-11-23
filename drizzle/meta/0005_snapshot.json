@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "76867284-b403-41f1-b840-fb334f741f27",
-  "prevId": "e7ff1f46-d1d5-4114-a44f-10d2fb29268b",
+  "id": "3274ab04-3d8b-4861-9527-14f69ae37766",
+  "prevId": "833e0672-6347-4a9f-9589-12b8726d9345",
   "tables": {
     "beers": {
       "name": "beers",
@@ -63,29 +63,29 @@
           "notNull": false,
           "autoincrement": false
         },
-        "rating_seb": {
-          "name": "rating_seb",
+        "rating_1": {
+          "name": "rating_1",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "rating_clem": {
-          "name": "rating_clem",
+        "rating_2": {
+          "name": "rating_2",
           "type": "real",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "comment_seb": {
-          "name": "comment_seb",
+        "comment_1": {
+          "name": "comment_1",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "comment_clem": {
-          "name": "comment_clem",
+        "comment_2": {
+          "name": "comment_2",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -122,6 +122,30 @@
           "isUnique": false
         }
       },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "settings": {
+      "name": "settings",
+      "columns": {
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},

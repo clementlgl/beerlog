@@ -11,8 +11,8 @@ export const load: PageServerLoad = () => {
 			name: b.name,
 			brewery: b.brewery,
 			style: b.style,
-			ratingSeb: b.ratingSeb,
-			ratingClem: b.ratingClem
+			rating1: b.rating1,
+			rating2: b.rating2
 		})
 		.from(b)
 		.all()

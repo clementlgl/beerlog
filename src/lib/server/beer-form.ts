@@ -8,10 +8,10 @@ export type BeerFormValues = {
 	style: string;
 	abv: string;
 	country: string;
-	ratingSeb: string;
-	ratingClem: string;
-	commentSeb: string;
-	commentClem: string;
+	rating1: string;
+	rating2: string;
+	comment1: string;
+	comment2: string;
 	imageUrl: string;
 };
 
@@ -25,10 +25,10 @@ export function readForm(f: FormData): BeerFormValues {
 		style: str(f, 'style'),
 		abv: str(f, 'abv'),
 		country: str(f, 'country'),
-		ratingSeb: str(f, 'ratingSeb'),
-		ratingClem: str(f, 'ratingClem'),
-		commentSeb: str(f, 'commentSeb'),
-		commentClem: str(f, 'commentClem'),
+		rating1: str(f, 'rating1'),
+		rating2: str(f, 'rating2'),
+		comment1: str(f, 'comment1'),
+		comment2: str(f, 'comment2'),
 		imageUrl: str(f, 'imageUrl')
 	};
 }
@@ -51,9 +51,9 @@ export function toFields(
 		return { error: 'Degré d’alcool invalide.' };
 	const style = v.style ? findStyle(v.style) : null;
 	if (v.style && !style) return { error: 'Style inconnu.' };
-	const ratingSeb = parseRating(v.ratingSeb);
-	const ratingClem = parseRating(v.ratingClem);
-	if (ratingSeb === undefined || ratingClem === undefined) return { error: 'Note invalide.' };
+	const rating1 = parseRating(v.rating1);
+	const rating2 = parseRating(v.rating2);
+	if (rating1 === undefined || rating2 === undefined) return { error: 'Note invalide.' };
 	return {
 		fields: {
 			barcode: v.barcode || null,
@@ -62,10 +62,10 @@ export function toFields(
 			style: style?.name ?? null,
 			abv,
 			country: v.country || null,
-			ratingSeb,
-			ratingClem,
-			commentSeb: v.commentSeb || null,
-			commentClem: v.commentClem || null
+			rating1,
+			rating2,
+			comment1: v.comment1 || null,
+			comment2: v.comment2 || null
 		}
 	};
 }

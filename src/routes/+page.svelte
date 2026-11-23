@@ -135,7 +135,7 @@
 						<div class="text-right">
 							<span class="block text-[22px] leading-none font-extrabold">{fr(b.rating)}</span>
 							<span class="text-[11px] whitespace-nowrap text-soft"
-								>Séb {b.ratingSeb ?? '–'} · Clem {b.ratingClem ?? '–'}</span
+								>{data.people[0].short} {b.rating1 ?? '–'} · {data.people[1].short} {b.rating2 ?? '–'}</span
 							>
 						</div>
 					{:else}
